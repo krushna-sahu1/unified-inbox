@@ -1,0 +1,101 @@
+{
+  "_note": "Fictional people and messages used only by the test suite. Times are relative to when a test loads them.",
+  "accounts": [
+    {"id": "mock-wa", "network": "whatsapp", "connected_hours_ago": 720},
+    {"id": "mock-ig", "network": "instagram", "connected_hours_ago": 720},
+    {"id": "mock-li", "network": "linkedin", "connected_hours_ago": 720}
+  ],
+  "chats": [
+    {
+      "id": "wa-maya", "account_id": "mock-wa", "name": "Maya Rivers",
+      "messages": [
+        {"from_me": true, "text": "Landing at 6, see you at the station?", "minutes_ago": 1500},
+        {"from_me": false, "text": "Yes! Platform 2.", "minutes_ago": 1490},
+        {"from_me": false, "text": "Hey, the landlord says the plumber can only come tomorrow 8am. Can you be home? Need to confirm by tonight, it's urgent", "minutes_ago": 190},
+        {"from_me": false, "text": "??", "minutes_ago": 75}
+      ]
+    },
+    {
+      "id": "wa-dev", "account_id": "mock-wa", "name": "Dev Patel (work)",
+      "messages": [
+        {"from_me": false, "text": "Client moved the demo to Thursday 10am.", "minutes_ago": 400},
+        {"from_me": false, "text": "Can you send me the updated deck before the deadline today? ASAP please", "minutes_ago": 300}
+      ]
+    },
+    {
+      "id": "wa-mum", "account_id": "mock-wa", "name": "Mum",
+      "messages": [
+        {"from_me": false, "text": "Did you eat?", "minutes_ago": 600},
+        {"from_me": true, "text": "Yes, made pasta", "minutes_ago": 590},
+        {"from_me": false, "text": "Good. Call me this weekend when you're free", "minutes_ago": 580}
+      ]
+    },
+    {
+      "id": "wa-bookclub", "account_id": "mock-wa", "name": "Sam Okafor",
+      "messages": [
+        {"from_me": false, "text": "Finished the book, the ending was wild", "minutes_ago": 2000},
+        {"from_me": true, "text": "Right?! Let's talk on Sunday", "minutes_ago": 1980}
+      ]
+    },
+    {
+      "id": "wa-old", "account_id": "mock-wa", "name": "Jordan Lee",
+      "messages": [
+        {"from_me": false, "text": "Long time! We should catch up sometime", "minutes_ago": 17280}
+      ]
+    },
+    {
+      "id": "wa-plumber", "account_id": "mock-wa", "name": "QuickFix Plumbing",
+      "messages": [
+        {"from_me": true, "text": "Hi, do you have a slot this week?", "minutes_ago": 900}
+      ]
+    },
+    {
+      "id": "ig-lena", "account_id": "mock-ig", "name": "lena.makes",
+      "messages": [
+        {"from_me": false, "text": "Love your sketches! Would you be up for a small collab for my shop? Paid of course", "minutes_ago": 720},
+        {"from_me": false, "text": "No rush, just let me know 🙂", "minutes_ago": 700}
+      ]
+    },
+    {
+      "id": "ig-arjun", "account_id": "mock-ig", "name": "arjun.climbs",
+      "messages": [
+        {"from_me": true, "text": "Bouldering Saturday?", "minutes_ago": 1300},
+        {"from_me": false, "text": "In! 10am at the usual gym?", "minutes_ago": 240}
+      ]
+    },
+    {
+      "id": "ig-tickets", "account_id": "mock-ig", "name": "noor.events",
+      "messages": [
+        {"from_me": false, "text": "Hi! You're on the waitlist for Friday. A spot opened, can you confirm within 2 hours or it goes to the next person?", "minutes_ago": 50}
+      ]
+    },
+    {
+      "id": "ig-chris", "account_id": "mock-ig", "name": "chris_t",
+      "messages": [
+        {"from_me": false, "text": "haha that meme", "minutes_ago": 3000},
+        {"from_me": true, "text": "😂", "minutes_ago": 2990}
+      ]
+    },
+    {
+      "id": "li-priya", "account_id": "mock-li", "name": "Priya Nair (Recruiter, Northwind)",
+      "messages": [
+        {"from_me": false, "text": "Hi! Your profile is a great fit for our Senior Backend role.", "minutes_ago": 1600},
+        {"from_me": true, "text": "Thanks Priya, happy to chat. What's the team working on?", "minutes_ago": 1500},
+        {"from_me": false, "text": "Great! Could you share your availability for a call this week? The hiring manager wants to decide by Friday, so it's important to confirm today if you can.", "minutes_ago": 210}
+      ]
+    },
+    {
+      "id": "li-marco", "account_id": "mock-li", "name": "Marco Bianchi",
+      "messages": [
+        {"from_me": false, "text": "Enjoyed your talk at the meetup. Would you be open to reviewing our open-source roadmap?", "minutes_ago": 900}
+      ]
+    },
+    {
+      "id": "li-elena", "account_id": "mock-li", "name": "Elena Park",
+      "messages": [
+        {"from_me": false, "text": "Congrats on the new role!", "minutes_ago": 4000},
+        {"from_me": true, "text": "Thank you Elena!", "minutes_ago": 3950}
+      ]
+    }
+  ]
+}

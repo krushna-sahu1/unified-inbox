@@ -1,0 +1,13 @@
+{
+  "name": "unified-inbox",
+  "label": "Inbox",
+  "description": "WhatsApp, Instagram and LinkedIn in one place: what needs a reply, drafts, scheduled messages and alerts.",
+  "icon": "Inbox",
+  "version": "1.4.1",
+  "tab": {
+    "path": "/inbox",
+    "position": "after:sessions"
+  },
+  "entry": "dist/index.js",
+  "api": "plugin_api.py"
+}

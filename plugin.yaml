@@ -1,0 +1,213 @@
+name: unified-inbox
+version: 1.4.1
+description: >-
+  One inbox for your WhatsApp, Instagram and LinkedIn messages (via Unipile). Read,
+  search and triage chats, get a daily digest, and draft replies. Nothing is sent unless you
+  approve it in Hermes's prompt (or run /inbox send), one message at a time, under strict pacing limits.
+  Also: scam warnings, plans into your calendar, translation, a weekly people radar and a spoken brief.
+  Needs your own Unipile account (API v2) with your apps connected.
+author: krushna-sahu1
+requires_hermes: ">=0.23.0"
+
+provides_tools:
+  - inbox_status
+  - inbox_list_chats
+  - inbox_read_chat
+  - inbox_search
+  - inbox_triage
+  - inbox_updates
+  - inbox_context
+  - inbox_loops
+  - inbox_memory
+  - inbox_schedule
+  - inbox_watch
+  - inbox_draft_reply
+  - inbox_list_drafts
+  - inbox_send
+  - inbox_react
+  - inbox_attachment
+  - inbox_mark_read
+  - inbox_safety
+  - inbox_calendar
+  - inbox_translate
+  - inbox_radar
+  - inbox_brief
+
+provides_hooks:
+  - pre_tool_call
+
+config_schema:
+  unipile_api_key:
+    type: secret
+    env: UNIPILE_API_KEY
+    label: Unipile API key
+    description: "From the Unipile dashboard (API v2)."
+  unipile_account_id:
+    type: str
+    default: ""
+    label: Only these Unipile accounts (optional)
+    description: "Leave empty to use every WhatsApp, Instagram and LinkedIn account connected to your Unipile app. Or list acc_... IDs separated by commas."
+  daily_send_limit:
+    type: int
+    default: 20
+    description: "Messages sent in any 24 hours, all networks. Can be lowered, never above 40."
+  daily_limit_whatsapp:
+    type: int
+    default: 15
+    description: "WhatsApp messages in any 24 hours. Never above 30."
+  daily_limit_instagram:
+    type: int
+    default: 10
+    description: "Instagram messages in any 24 hours. Never above 20."
+  daily_limit_linkedin:
+    type: int
+    default: 10
+    description: "LinkedIn messages in any 24 hours. Never above 20."
+  new_conversations_per_day:
+    type: int
+    default: 5
+    description: "Messages a day to people who have not written to you in the last week (or ever). Never above 20; 0 = replies only. Starting many chats is what gets accounts restricted."
+  hourly_send_limit:
+    type: int
+    default: 5
+    description: "Messages sent in any hour, all networks. Never above 8."
+  per_chat_hourly_limit:
+    type: int
+    default: 2
+    description: "Messages to the same chat in any hour. Never above 3."
+  min_send_gap_seconds:
+    type: int
+    default: 45
+    description: "Minimum wait between sends (a random 0-100% extra is added). Never below 20."
+  reply_window_days:
+    type: int
+    default: 7
+    description: "Only reply to chats where the other person wrote within this many days. Never above 14."
+  quiet_hours:
+    type: str
+    default: ""
+    description: "Block sends in this local time range, e.g. 23:00-07:00. Empty = off."
+  mark_read_after_reply:
+    type: bool
+    default: false
+    label: Mark a chat as read after you reply
+    description: "Off by default: the plugin never marks messages as read on its own. On: after a reply is sent, that chat is marked read (the other person may see read receipts)."
+  unanswered_hours:
+    type: int
+    default: 4
+    description: "A chat counts as unanswered when their last message is older than this."
+  cache_retention_days:
+    type: int
+    default: 180
+    description: "Cached chats and messages older than this are deleted from this machine. 7 to 3650."
+  sync_enabled:
+    type: bool
+    default: true
+    description: "Check for new messages in the background while Hermes runs."
+  poll_seconds:
+    type: int
+    default: 120
+    description: "Shortest gap between background checks. 60 to 3600. Slower when idle or when webhooks deliver live."
+  sync_budget_percent:
+    type: int
+    default: 50
+    description: "Share of the hourly Unipile call budget the background sync may use. 10 to 80."
+  webhook_port:
+    type: int
+    default: 0
+    description: "Local port for the real-time webhook receiver (0 = off). Restart Hermes after changing it."
+  webhook_host:
+    type: str
+    default: "127.0.0.1"
+    description: "Address the webhook receiver listens on. Keep 127.0.0.1 behind a proxy or tunnel."
+  memory_enabled:
+    type: bool
+    default: true
+    description: "Remember people, summarize chats and track open items, using Hermes's language model."
+  memory_llm_calls_per_day:
+    type: int
+    default: 200
+    description: "Most language-model calls memory may make in a day. 0 to 5000."
+  auto_draft_per_day:
+    type: int
+    default: 20
+    label: Auto-drafts for urgent chats (per day)
+    description: "When an urgent message arrives, Hermes drafts a reply for you right away (never sends it; you get an alert). Uses memory's language model and counts toward its daily cap. 0 = off. 0 to 100."
+  style_learning:
+    type: bool
+    default: true
+    label: Learn how I write
+    description: "Learn your writing style from messages you typed (never from what Hermes sent), so drafts sound like you. A few guidelines are written by Hermes's model about once a week."
+  scam_shield:
+    type: bool
+    default: true
+    label: Scam warnings
+    description: "Warn about messages that look like a scam (asking for a code, money or gift cards; fake bank, police or courier messages; prizes, jobs, look-alike links). Checked on this machine only. A reply that would share a code, password, card or account number with such a chat is stopped."
+  plan_detection:
+    type: bool
+    default: true
+    label: Find plans for my calendar
+    description: "Spot plans in chats (\"meet Thursday 4pm\", \"kal shaam 6 baje\") and offer to add them to your calendar with one tap. Nothing is written to a calendar by itself."
+  calendar_ics_url:
+    type: secret
+    env: CALENDAR_ICS_URL
+    label: My calendar's private iCal address (optional)
+    description: "Read-only, to tell whether you are free when someone proposes a time. Google Calendar: Settings -> your calendar -> Secret address in iCal format. Fetched over HTTPS at most every 15 minutes; only the next 60 days are kept."
+  my_language:
+    type: str
+    default: "English"
+    label: My language
+    description: "Messages in languages you don't read are translated into this one."
+  also_read:
+    type: str
+    default: ""
+    label: Other languages I read
+    description: "Never translated, e.g. \"Hindi, Hinglish\". Languages you write in yourself are recognised automatically."
+  auto_translate:
+    type: bool
+    default: true
+    label: Translate new messages automatically
+    description: "New messages in a language you don't read are translated with Hermes's model as they arrive (counts toward memory's daily cap; codes and passwords are removed first). Off: translate a chat only when you ask."
+  people_radar:
+    type: bool
+    default: true
+    label: People radar
+    description: "Birthday reminders the day before (worked out from your chats) and a weekly summary: who is waiting longest, who you are drifting from, and your reply time."
+  embedding_provider:
+    type: str
+    choices: [none, openai, gemini, cohere, voyage]
+    default: none
+    label: Search by meaning
+    description: "Cloud embeddings for search by meaning (all four handle Hindi and Hinglish). Message text is sent to this provider, with codes, passwords and account numbers removed first."
+  embedding_api_key:
+    type: secret
+    env: EMBEDDING_API_KEY
+    label: Embedding API key
+    description: "The API key of the provider chosen above."
+  embedding_model:
+    type: str
+    default: ""
+    description: "Optional model override. Empty = the provider's recommended multilingual model."
+  embedding_chars_per_day:
+    type: int
+    default: 3000000
+    description: "Most characters sent for embedding per day (about 750,000 tokens)."
+  schedule_grace_minutes:
+    type: int
+    default: 30
+    description: "A scheduled message may go out this late (waiting for a send gap). Later than that it is never sent. 5 to 240."
+  supabase_url:
+    type: str
+    default: ""
+    label: Supabase project URL (optional)
+    description: "Keep a synced copy in your own Supabase, e.g. https://abcd.supabase.co. Empty = everything stays on this machine."
+  supabase_secret_key:
+    type: secret
+    env: SUPABASE_SECRET_KEY
+    label: Supabase secret key
+    description: "Project Settings -> API Keys -> secret key (sb_secret_...). Stays in Hermes's credential store."
+  supabase_access_token:
+    type: secret
+    env: SUPABASE_ACCESS_TOKEN
+    label: Supabase access token (optional)
+    description: "Only to create the tables for you in one click (supabase.com/dashboard/account/tokens). Without it, paste the SQL from the Inbox page into the SQL editor once."
