@@ -124,6 +124,23 @@ def wordmark(lines: list[str], px: int, x: float, y: float, line_gap: int, bands
     return svg, width, height
 
 
+HERMES_LOGO = OUT / "hermes-agent.svg"  # the official Hermes Agent mark, white line art on transparent
+
+
+def hermes_logo(cx: float, cy: float, r: float, clip_id: str, ring: bool = False) -> str:
+    """The Hermes Agent girl inside a round medallion of radius r, centred on (cx, cy).
+
+    Inlined (not linked) because GitHub shows SVGs as images, which cannot load other files."""
+    src = HERMES_LOGO.read_text(encoding="utf-8")
+    d = src.split(' d="', 1)[1].split('"', 1)[0]
+    w = 1.835 * r
+    h = w * 5559 / 5487
+    edge = f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{INK}" stroke="{NOUS_LIT}" stroke-width="1"/>' if ring else ""
+    return (f'{edge}<clipPath id="{clip_id}"><circle cx="{cx}" cy="{cy}" r="{r - 0.5}"/></clipPath>'
+            f'<g clip-path="url(#{clip_id})"><svg x="{cx - w / 2:.2f}" y="{cy - 0.87 * r:.2f}" width="{w:.2f}" height="{h:.2f}" '
+            f'viewBox="0 0 5487 5559"><path fill="#FFFFFF" d="{d}"/></svg></g>')
+
+
 def caduceus(cx: float, cy: float, s: float = 1.0) -> str:
     """The herald's staff: a rod, two serpents that cross it three times, and a pair of wings."""
     top, bottom = cy - 64 * s, cy + 78 * s
@@ -281,9 +298,9 @@ def hero(width: int = 1200, height: int = 480) -> str:
 {"".join(streams)}
 {"".join(pulses)}
 {gold}
-{caduceus(node_x, cy + 4, 0.58)}
-<g transform="translate({pad + 6} {cy - 145})">{caduceus(0, 0, 0.13)}</g>
-<text x="{pad + 22}" y="{cy - 140}" font-family="{MONO}" font-size="12" letter-spacing="2" fill="{DIM}">A HERMES AGENT PLUGIN</text>
+{hermes_logo(node_x, cy, 52, "hlogo")}
+{hermes_logo(pad + 10, cy - 144, 10, "hlogo-s", ring=True)}
+<text x="{pad + 28}" y="{cy - 140}" font-family="{MONO}" font-size="12" letter-spacing="2" fill="{DIM}">A HERMES AGENT PLUGIN</text>
 {mark}
 <g class="slice s1" clip-path="url(#c1)"><use xlink:href="#mark" href="#mark"/></g>
 <g class="slice s2" clip-path="url(#c2)"><use xlink:href="#mark" href="#mark"/></g>
